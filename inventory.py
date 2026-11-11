@@ -56,3 +56,22 @@ def low_stock(inventory):
 
 def total_units(inventory):
     return sum(product["quantity"] for product in inventory)
+
+
+def export_csv(inventory, path):
+    """Export the inventory to a CSV file."""
+    import csv
+
+    with open(path, "w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["sku", "name", "quantity", "reorder_level"])
+        for product in inventory:
+            writer.writerow(
+                [
+                    product["sku"],
+                    product["name"],
+                    product["quantity"],
+                    product["reorder_level"],
+                ]
+            )
+    return path

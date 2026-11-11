@@ -39,5 +39,26 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(total_units(self.inventory), 6)
 
 
+class ExportTests(unittest.TestCase):
+    def test_export_csv(self):
+        import csv
+        import os
+        import tempfile
+
+        from inventory import add_product, export_csv
+
+        inventory = []
+        add_product(inventory, "A1", "Keyboard", 5, 2)
+        add_product(inventory, "B2", "Mouse", 1, 3)
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "inventory.csv")
+            export_csv(inventory, path)
+            with open(path, encoding="utf-8") as handle:
+                rows = list(csv.reader(handle))
+        self.assertEqual(rows[0], ["sku", "name", "quantity", "reorder_level"])
+        self.assertEqual(rows[1][0], "A1")
+        self.assertEqual(len(rows), 3)
+
+
 if __name__ == "__main__":
     unittest.main()
