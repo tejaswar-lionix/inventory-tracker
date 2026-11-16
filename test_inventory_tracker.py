@@ -65,6 +65,39 @@ class ReorderReportTests(unittest.TestCase):
         self.assertEqual(reorder_report([]), [])
 
 
+class ApplyReorderTests(unittest.TestCase):
+    def test_tops_multiple_low_items(self):
+        from inventory import apply_reorders
+
+        inventory = []
+        add_product(inventory, "A1", "Keyboard", 0, 2)
+        add_product(inventory, "B2", "Mouse", 1, 3)
+        apply_reorders(inventory)
+        self.assertEqual(inventory[0]["quantity"], 2)
+        self.assertEqual(inventory[1]["quantity"], 3)
+
+    def test_only_changed_items_reported(self):
+        from inventory import apply_reorders
+
+        inventory = []
+        add_product(inventory, "A1", "Keyboard", 0, 2)
+        add_product(inventory, "B2", "Mouse", 5, 3)
+        self.assertEqual(apply_reorders(inventory), [{"sku": "A1", "added": 2}])
+
+    def test_above_threshold_untouched(self):
+        from inventory import apply_reorders
+
+        inventory = []
+        add_product(inventory, "A1", "Keyboard", 5, 2)
+        apply_reorders(inventory)
+        self.assertEqual(inventory[0]["quantity"], 5)
+
+    def test_empty_inventory(self):
+        from inventory import apply_reorders
+
+        self.assertEqual(apply_reorders([]), [])
+
+
 class ExportTests(unittest.TestCase):
     def test_export_csv(self):
         import csv
