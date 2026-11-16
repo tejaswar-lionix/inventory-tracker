@@ -54,6 +54,20 @@ def low_stock(inventory):
     ]
 
 
+def reorder_report(inventory):
+    report = [
+        {
+            "sku": product["sku"],
+            "name": product["name"],
+            "quantity": product["quantity"],
+            "reorder_level": product["reorder_level"],
+            "needed": product["reorder_level"] - product["quantity"],
+        }
+        for product in low_stock(inventory)
+    ]
+    return sorted(report, key=lambda item: item["sku"])
+
+
 def total_units(inventory):
     return sum(product["quantity"] for product in inventory)
 
