@@ -1,6 +1,6 @@
 import unittest
 
-from inventory import add_product, adjust, low_stock, total_units
+from inventory import add_product, adjust, low_stock, reorder_report, total_units
 
 
 class InventoryTests(unittest.TestCase):
@@ -37,6 +37,32 @@ class InventoryTests(unittest.TestCase):
 
     def test_total_units(self):
         self.assertEqual(total_units(self.inventory), 6)
+
+
+class ReorderReportTests(unittest.TestCase):
+    def test_only_low_stock_items_included(self):
+        inventory = []
+        add_product(inventory, "A1", "Keyboard", 5, 2)
+        add_product(inventory, "B2", "Mouse", 1, 3)
+        add_product(inventory, "C3", "Cable", 0, 4)
+        report = reorder_report(inventory)
+        self.assertEqual([item["sku"] for item in report], ["B2", "C3"])
+
+    def test_needed_is_reorder_level_minus_quantity(self):
+        inventory = []
+        add_product(inventory, "B2", "Mouse", 1, 3)
+        self.assertEqual(reorder_report(inventory)[0]["needed"], 2)
+
+    def test_report_sorted_by_sku(self):
+        inventory = []
+        add_product(inventory, "C3", "Cable", 0, 4)
+        add_product(inventory, "A1", "Keyboard", 0, 2)
+        add_product(inventory, "B2", "Mouse", 1, 3)
+        report = reorder_report(inventory)
+        self.assertEqual([item["sku"] for item in report], ["A1", "B2", "C3"])
+
+    def test_empty_inventory(self):
+        self.assertEqual(reorder_report([]), [])
 
 
 class ExportTests(unittest.TestCase):
