@@ -39,6 +39,38 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(total_units(self.inventory), 6)
 
 
+class ProductLookupTests(unittest.TestCase):
+    def setUp(self):
+        self.inventory = []
+        add_product(self.inventory, "A1", "Keyboard", 5, 2)
+        add_product(self.inventory, "B2", "Mouse", 1, 3)
+
+    def test_find_existing_product(self):
+        from inventory import find_product
+
+        product = find_product(self.inventory, "A1")
+        self.assertEqual(product["name"], "Keyboard")
+
+    def test_find_unknown_product_returns_none(self):
+        from inventory import find_product
+
+        self.assertIsNone(find_product(self.inventory, "ZZ"))
+
+    def test_remove_existing_product(self):
+        from inventory import remove_product
+
+        removed = remove_product(self.inventory, "A1")
+        self.assertEqual(removed["name"], "Keyboard")
+        self.assertEqual(len(self.inventory), 1)
+        self.assertEqual(self.inventory[0]["sku"], "B2")
+
+    def test_remove_unknown_product_raises(self):
+        from inventory import remove_product
+
+        with self.assertRaises(KeyError):
+            remove_product(self.inventory, "ZZ")
+
+
 class ReorderReportTests(unittest.TestCase):
     def test_only_low_stock_items_included(self):
         inventory = []
