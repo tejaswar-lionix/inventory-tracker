@@ -46,6 +46,20 @@ def adjust(inventory, sku, delta):
     raise KeyError(f"unknown sku: {sku}")
 
 
+def find_product(inventory, sku):
+    for product in inventory:
+        if product["sku"] == sku:
+            return product
+    return None
+
+
+def remove_product(inventory, sku):
+    for index, product in enumerate(inventory):
+        if product["sku"] == sku:
+            return inventory.pop(index)
+    raise KeyError(f"unknown sku: {sku}")
+
+
 def low_stock(inventory):
     return [
         product
