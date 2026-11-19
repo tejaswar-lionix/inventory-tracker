@@ -60,6 +60,17 @@ def remove_product(inventory, sku):
     raise KeyError(f"unknown sku: {sku}")
 
 
+def search(inventory, query):
+    text = query.strip().lower()
+    if not text:
+        return []
+    return [
+        product
+        for product in inventory
+        if text in product["sku"].lower() or text in product["name"].lower()
+    ]
+
+
 def low_stock(inventory):
     return [
         product

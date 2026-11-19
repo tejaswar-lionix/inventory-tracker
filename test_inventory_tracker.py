@@ -71,6 +71,45 @@ class ProductLookupTests(unittest.TestCase):
             remove_product(self.inventory, "ZZ")
 
 
+class SearchTests(unittest.TestCase):
+    def setUp(self):
+        self.inventory = []
+        add_product(self.inventory, "A1", "Keyboard", 5, 2)
+        add_product(self.inventory, "B2", "Mouse", 1, 3)
+        add_product(self.inventory, "C3", "Keyboard Cover", 2, 1)
+
+    def test_sku_match(self):
+        from inventory import search
+
+        self.assertEqual([item["sku"] for item in search(self.inventory, "B2")], ["B2"])
+
+    def test_name_match(self):
+        from inventory import search
+
+        self.assertEqual(
+            [item["sku"] for item in search(self.inventory, "Keyboard")],
+            ["A1", "C3"],
+        )
+
+    def test_case_insensitive(self):
+        from inventory import search
+
+        self.assertEqual(
+            [item["sku"] for item in search(self.inventory, "keyboard")],
+            ["A1", "C3"],
+        )
+
+    def test_no_match(self):
+        from inventory import search
+
+        self.assertEqual(search(self.inventory, "monitor"), [])
+
+    def test_empty_query_returns_empty(self):
+        from inventory import search
+
+        self.assertEqual(search(self.inventory, ""), [])
+
+
 class ReorderReportTests(unittest.TestCase):
     def test_only_low_stock_items_included(self):
         inventory = []
