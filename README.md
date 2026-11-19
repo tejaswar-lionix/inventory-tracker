@@ -9,6 +9,7 @@ python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 5, 2); 
 python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 1, 5); print(reorder_report(i))"
 python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 1, 5); print(apply_reorders(i))"
 python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 5, 2); print(find_product(i, 'A1'))"
+python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 5, 2); print(search(i, 'keyboard'))"
 ```
 
 ## Features
@@ -19,6 +20,7 @@ python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 5, 2); 
 - Apply reorders with apply_reorders(inventory)
 - CSV export with export_csv(inventory, path)
 - Look up and remove products with find_product(inventory, sku) and remove_product(inventory, sku)
+- Search by SKU or name with search(inventory, query)
 
 ## Tests
 
