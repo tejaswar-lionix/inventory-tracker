@@ -190,5 +190,25 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
 
 
+class StockSummaryTests(unittest.TestCase):
+    def test_summary_counts(self):
+        from inventory import add_product, stock_summary
+
+        inventory = add_product([], "A1", "Keyboard", 5, 2)
+        add_product(inventory, "A2", "Mouse", 1, 3)
+        self.assertEqual(
+            stock_summary(inventory),
+            {"products": 2, "total_units": 6, "low_stock": 1},
+        )
+
+    def test_empty(self):
+        from inventory import stock_summary
+
+        self.assertEqual(
+            stock_summary([]),
+            {"products": 0, "total_units": 0, "low_stock": 0},
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

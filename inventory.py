@@ -125,3 +125,12 @@ def export_csv(inventory, path):
                 ]
             )
     return path
+
+
+def stock_summary(inventory):
+    """Return headline counts for the whole inventory."""
+    return {
+        "products": len(inventory),
+        "total_units": total_units(inventory),
+        "low_stock": len(low_stock(inventory)),
+    }
