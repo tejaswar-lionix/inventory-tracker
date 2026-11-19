@@ -28,6 +28,10 @@ python3 -c "from inventory import *; i=add_product([], 'A1', 'Keyboard', 5, 2); 
 python3 -m unittest -q
 ```
 
+## Additional API
+
+- `stock_summary(inventory)` reports product, unit, and low-stock counts.
+
 ## License
 
 MIT
